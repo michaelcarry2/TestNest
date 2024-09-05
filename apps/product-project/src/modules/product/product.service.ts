@@ -28,10 +28,10 @@ export class ProductService {
     update: Product;
   }): Promise<Product> {
     const { productId, update } = payload;
-
+    const { amount } = update;
     return this.productModel.findOneAndUpdate(
       { productId },
-      { ...update },
+      { $inc: { amount }, update },
       { new: true },
     );
   }

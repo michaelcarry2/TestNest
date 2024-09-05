@@ -1,11 +1,9 @@
 import { IUser, User, UserCallerService } from '@Libs/user-caller';
 import {
-  BadRequestException,
   Body,
   Controller,
   Get,
   InternalServerErrorException,
-  Param,
   Post,
   Put,
   UseGuards,
@@ -13,11 +11,12 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateUserTransformPipe } from './pipes/create-user-tranforms.pipe';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { tryit } from 'radash';
 
 @Controller('user')
+@ApiTags('User')
 export class UserController {
   constructor(private readonly userCallerService: UserCallerService) {}
 
@@ -26,20 +25,6 @@ export class UserController {
     @Body(CreateUserTransformPipe) body: CreateUserDto,
   ): Promise<any> {
     return this.userCallerService.create(body);
-  }
-
-  @Get(':username')
-  async getByUsername(@Param('username') username: string): Promise<any> {
-    const [error, user] = await tryit(this.userCallerService.getByUsername)(
-      username,
-    );
-    if (error) {
-      throw new InternalServerErrorException();
-    }
-    if (!user) {
-      throw new BadRequestException('Username Not Found');
-    }
-    return user;
   }
 
   @Put()

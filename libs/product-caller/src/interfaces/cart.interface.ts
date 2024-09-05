@@ -11,6 +11,7 @@ export interface ICart {
   totalPrice: number;
   amount: number;
   status?: CartStatusEnum;
+  userId: string;
   createdAt?: Date;
   updatedAt?: Date;
 }

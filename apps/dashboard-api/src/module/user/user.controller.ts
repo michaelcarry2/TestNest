@@ -6,7 +6,6 @@ import {
   Get,
   InternalServerErrorException,
   Param,
-  Post,
   Put,
   UseGuards,
 } from '@nestjs/common';
@@ -17,6 +16,8 @@ import { tryit } from 'radash';
 
 @Controller('user')
 @ApiTags('User')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 export class UserController {
   constructor(private readonly userCallerService: UserCallerService) {}
 
@@ -35,8 +36,6 @@ export class UserController {
   }
 
   @Put(':username')
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
   async updateUser(
     @Param('username') username: string,
     @Body() body: UpdateUserDto,
@@ -62,8 +61,6 @@ export class UserController {
   }
 
   @Get()
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
   async getMe(@User() user: IUser): Promise<any> {
     return user;
   }

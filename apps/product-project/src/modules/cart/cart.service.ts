@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Cart } from './schema/cart.schema';
 import { connectionName } from '../../constant';
 import { FilterQuery, Model } from 'mongoose';
+import { ICart } from '@Libs/product-caller/interfaces/cart.interface';
 
 @Injectable()
 export class CartService {
@@ -35,5 +36,19 @@ export class CartService {
 
   async deleteCart(cartId: string): Promise<Cart> {
     return this.cartModel.findOneAndDelete({ cartId });
+  }
+
+  async getReports(payload: {
+    startDate: string;
+    endDate: string;
+  }): Promise<ICart[]> {
+    const { startDate, endDate } = payload;
+    const query = {
+      createdAt: {
+        $gte: new Date(startDate),
+        $lte: new Date(endDate),
+      },
+    };
+    return this.cartModel.find(query).lean();
   }
 }

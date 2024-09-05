@@ -1,11 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CartCommands, ProductCommands, ProductServeiceRMQ } from './constant';
-import { ClientProxy, Payload } from '@nestjs/microservices';
+import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
-import { UserCommands } from '@Libs/user-caller/constant';
 import { IProduct, IProductOption } from './interfaces/product.interface';
 import { UpdateProductInterface } from './interfaces/update-product.interface';
 import { ICart } from './interfaces/cart.interface';
+import { QueryReportDto } from '../../../apps/dashboard-api/src/module/cart/dto/query-report.dto';
 
 @Injectable()
 export class ProductCallerService {
@@ -55,6 +55,18 @@ export class ProductCallerService {
   getByCartId = async (cartId: string): Promise<ICart> => {
     return lastValueFrom(
       this.rmqProductService.send(CartCommands.getByCartId, cartId),
+    );
+  };
+
+  getAllCarts = async (payload: ICart): Promise<ICart[]> => {
+    return lastValueFrom(
+      this.rmqProductService.send(CartCommands.getAllCarts, payload),
+    );
+  };
+
+  getReports = async (payload: QueryReportDto): Promise<ICart[]> => {
+    return lastValueFrom(
+      this.rmqProductService.send(CartCommands.getReports, payload),
     );
   };
 }

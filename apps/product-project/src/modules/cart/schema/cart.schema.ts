@@ -29,6 +29,12 @@ export class Cart extends Document {
   product: Pick<Product, 'productId' | 'productName' | 'brand'>;
 
   @Prop({
+    type: String,
+    required: true,
+  })
+  userId: string;
+
+  @Prop({
     type: Number,
     required: true,
   })
@@ -43,7 +49,7 @@ export class Cart extends Document {
   @Prop({
     type: String,
     enum: CartStatusEnum,
-    default: CartStatusEnum.WAITING,
+    default: CartStatusEnum.SUCCESS,
   })
   status?: CartStatusEnum;
 

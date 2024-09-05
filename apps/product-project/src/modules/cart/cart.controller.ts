@@ -3,6 +3,7 @@ import { CartService } from './cart.service';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { Cart } from './schema/cart.schema';
 import { FilterQuery } from 'mongoose';
+import { ICart } from '@Libs/product-caller/interfaces/cart.interface';
 
 @Controller()
 export class CartController {
@@ -49,5 +50,15 @@ export class CartController {
   })
   async deleteCart(@Payload() cartId: string): Promise<Cart> {
     return this.cartService.deleteCart(cartId);
+  }
+
+  @MessagePattern({
+    cmd: 'cart',
+    method: 'getReports',
+  })
+  async getReports(
+    @Payload() payload: { startDate: string; endDate: string },
+  ): Promise<ICart[]> {
+    return this.cartService.getReports(payload);
   }
 }

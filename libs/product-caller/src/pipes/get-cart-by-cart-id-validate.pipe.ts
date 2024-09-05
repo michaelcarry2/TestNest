@@ -1,12 +1,6 @@
-import {
-  ArgumentMetadata,
-  BadRequestException,
-  Injectable,
-  PipeTransform,
-} from '@nestjs/common';
-import { ProductCallerService } from '../product-caller.service';
-import { IProduct } from '../interfaces/product.interface';
+import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
 import { ICart } from '../interfaces/cart.interface';
+import { ProductCallerService } from '@Libs/product-caller';
 
 @Injectable()
 export class GetCartByCartIdValidatePipe implements PipeTransform {

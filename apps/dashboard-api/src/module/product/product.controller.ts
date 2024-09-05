@@ -15,15 +15,19 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
 import { tryit } from 'radash';
 import { CreateProductDto } from './dtos/create-product.dto';
 import { UpdateProductDto } from './dtos/update-product.dto';
 import { QueryProductDto } from './dtos/query-product.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('product')
 @ApiTags('Product')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 export class ProductController {
   private logger = new Logger(ProductController.name);
   constructor(private readonly productCallerService: ProductCallerService) {}

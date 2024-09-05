@@ -33,7 +33,7 @@ export const CartCommands = {
   },
   getByCartId: {
     cmd: 'cart',
-    method: 'getByCartId',
+    method: 'getCartById',
   },
   getAllCarts: {
     cmd: 'cart',
@@ -46,5 +46,9 @@ export const CartCommands = {
   deleteCart: {
     cmd: 'cart',
     method: 'deleteCart',
+  },
+  getReports: {
+    cmd: 'cart',
+    method: 'getReports',
   },
 };

@@ -9,32 +9,63 @@ import {
   Param,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiParam, ApiTags } from '@nestjs/swagger';
-import { QueryProductDto } from '../product/dtos/query-product.dto';
+import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
+import { CartService } from './cart.service';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { QueryCartDto } from './dtos/create-cart.dto';
+import { IUser, User } from '@Libs/user-caller';
 
-@Controller('cart')
-@ApiTags('Cart')
+@Controller('checkout')
+@ApiTags('Checkout')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 export class CartController {
   private logger = new Logger(CartController.name);
-  constructor(private readonly productCallerService: ProductCallerService) {}
+  constructor(
+    private readonly productCallerService: ProductCallerService,
+    private readonly cartService: CartService,
+  ) {}
 
-  @Get(':carttId')
-  @ApiParam({ name: 'carttId' })
+  @Get(':cartId')
+  @ApiParam({ name: 'cartId' })
   async getByProductId(
-    @Param(GetCartByCartIdValidatePipe) product: ICart,
+    @Param(GetCartByCartIdValidatePipe) cart: ICart,
   ): Promise<ICart> {
-    return product;
+    return cart;
   }
 
   @Get()
-  async getAllProduct(@Query() query: QueryProductDto): Promise<IProduct[]> {
-    return this.productCallerService.getAllProducts(query);
+  async getAllProduct(
+    @User() user: IUser,
+    @Query() query: ICart,
+  ): Promise<ICart[]> {
+    return this.productCallerService.getAllCarts({
+      ...query,
+      userId: user.userId,
+    });
   }
 
   @Post()
-  async createCart(@Body() body: any): Promise<ICart> {
-    return this.productCallerService.createCart(body);
+  async checkout(
+    @User() user: IUser,
+    @Body() body: QueryCartDto,
+  ): Promise<ICart> {
+    const { productId, amount } = body;
+
+    const data = {
+      productId,
+      cart: {
+        amount,
+      } as ICart,
+    };
+
+    const makeCart = await this.cartService.makeCart(data);
+
+    return this.productCallerService.createCart({
+      ...makeCart,
+      userId: user.userId,
+    });
   }
 }
