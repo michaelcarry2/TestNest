@@ -97,7 +97,8 @@
     "moduleNameMapper": {
       "^@Libs/microservice(|/.*)$": "<rootDir>/libs/microservice/src/$1",
       "^@Libs/mongoose(|/.*)$": "<rootDir>/libs/mongoose/src/$1",
-      "^@Libs/user-caller(|/.*)$": "<rootDir>/libs/user-caller/src/$1"
+      "^@Libs/user-caller(|/.*)$": "<rootDir>/libs/user-caller/src/$1",
+      "^@Libs/product-caller(|/.*)$": "<rootDir>/libs/product-caller/src/$1"
     }
   }
 }

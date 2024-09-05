@@ -54,6 +54,33 @@
       "compilerOptions": {
         "tsConfigPath": "libs/user-caller/tsconfig.lib.json"
       }
+    },
+    "product-project": {
+      "type": "application",
+      "root": "apps/product-project",
+      "entryFile": "main",
+      "sourceRoot": "apps/product-project/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/product-project/tsconfig.app.json"
+      }
+    },
+    "dashboard-api": {
+      "type": "application",
+      "root": "apps/dashboard-api",
+      "entryFile": "main",
+      "sourceRoot": "apps/dashboard-api/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/dashboard-api/tsconfig.app.json"
+      }
+    },
+    "product-caller": {
+      "type": "library",
+      "root": "libs/product-caller",
+      "entryFile": "index",
+      "sourceRoot": "libs/product-caller/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/product-caller/tsconfig.lib.json"
+      }
     }
   }
 }

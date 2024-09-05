@@ -36,6 +36,12 @@
       ],
       "@Libs/user-caller/*": [
         "libs/user-caller/src/*"
+      ],
+      "@Libs/product-caller": [
+        "libs/product-caller/src"
+      ],
+      "@Libs/product-caller/*": [
+        "libs/product-caller/src/*"
       ]
     }
   }

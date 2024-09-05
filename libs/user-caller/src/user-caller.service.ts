@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { AuthCommands, UserCommands, UserServiceRMQ } from '../constant';
+import { AuthCommands, UserCommands, UserServiceRMQ } from './constant';
 import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
 import { JwtSignInterface } from './interfaces/jwt-sign.interface';

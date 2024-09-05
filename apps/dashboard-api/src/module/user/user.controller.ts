@@ -10,26 +10,18 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { CreateUserTransformPipe } from './pipes/create-user-tranforms.pipe';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { tryit } from 'radash';
 
 @Controller('user')
+@ApiTags('User')
 export class UserController {
   constructor(private readonly userCallerService: UserCallerService) {}
 
-  @Post()
-  async create(
-    @Body(CreateUserTransformPipe) body: CreateUserDto,
-  ): Promise<any> {
-    return this.userCallerService.create(body);
-  }
-
   @Get(':username')
-  async getByUsername(@Param('username') username: string): Promise<any> {
+  async getByUsername(@Param('username') username: string): Promise<IUser> {
     const [error, user] = await tryit(this.userCallerService.getByUsername)(
       username,
     );
@@ -42,13 +34,23 @@ export class UserController {
     return user;
   }
 
-  @Put()
+  @Put(':username')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   async updateUser(
-    @User() user: IUser,
+    @Param('username') username: string,
     @Body() body: UpdateUserDto,
   ): Promise<any> {
+    const [err, user] = await tryit(this.userCallerService.getByUsername)(
+      username,
+    );
+    if (err) {
+      throw new InternalServerErrorException();
+    }
+    if (!user) {
+      throw new BadRequestException('Username Not Found');
+    }
+
     const [error, update] = await tryit(this.userCallerService.updateUser)({
       username: user.username,
       roles: body.roles,
